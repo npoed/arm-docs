@@ -1,0 +1,22 @@
+Проверка на работоспособность осуществляется путём запуска \texttt{PLP} и дальнейшего входа
+в систему. Если в процессе этих действий не возникло никаких ошибок, в том числе в лог-файлах,
+то программу можно считать работоспособной.
+
+В ходе работы программы в лог-файлах могут возникать следующие сообщения:
+\begin{itemize}
+	\item \texttt{django.db.utils.OperationalError: (2003, "Can't connect to MySQL server on '127.0.0.1' (111)")} ---
+		это сообщение появляется, если сервер \texttt{MySQL} не запущен или не доступен по указанным в настроечном файле адресу и порту.
+	\item \texttt{django.db.utils.OperationalError: (1049, "Unknown database \textquotesingle{}ppp\textquotesingle{}")} --- это сообщение
+		появляется, если имя базы в настроечном файле указано неверно
+	\item \texttt{django.db.utils.OperationalError: (1045, "Access denied for user \textquotesingle{}maxim\textquotesingle{}@\textquotesingle{}localhost\textquotesingle{} (using password: YES)")} ---
+		это сообщение появляется, если имя пользователя или пароль к базе данных в настроечном файле указаны неверно
+	\item \texttt{SSONotAvailable} --- это сообщение об ошибке связи с \texttt{SSO}, возможно,
+		\texttt{SSO} перестало отвечать на запросы.
+	\item \texttt{SSOCommunicationError} --- это сообщение об ошибке обмена данными с \texttt{SSO},
+		скорее всего, программа не была полностью настроена для общения с \texttt{SSO}.
+	\item \texttt{EDXNotAvailable} --- это сообщение об ошибке связи с \texttt{EDX CMS} или \texttt{EDX LMS},
+		возможно, \texttt{EDX CMS} или \texttt{EDX LMS} перестал отвечать на запросы.
+	\item \texttt{EDXCommunicationError} --- это сообщение об ошибке обмена данными
+		с \texttt{EDX CMS} или \texttt{EDX LMS}, скорее всего,
+		программа не была полностью настроена для общения с \texttt{EDX CMS} или \texttt{EDX LMS}.
+\end{itemize}

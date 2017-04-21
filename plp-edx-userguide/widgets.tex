@@ -1,0 +1,121 @@
+\subsection{Виджет выбора даты и времени}
+\label{widget:date_time_picker}
+Вызов данного виджета производится путем нажатия на кнопку \vcenteredinclude[height=25px]{images/widgets/date_time_picker_call_btn}, после чего на экране появится календарь (рис.~\ref{img:widgets:date_time_picker_date}), в котором пользователь может задать дату.
+\begin{figure}[H]
+	\center{\includegraphics[height=6cm]{images/widgets/date_time_picker_date}}
+	\caption{Виджет для задания даты.}
+	\label{img:widgets:date_time_picker_date}
+\end{figure}
+
+Для переключения на виджет задания времени, пользователю необходимо нажать на кнопку \vcenteredinclude[height=25px]{images/widgets/date_time_picker_time_btn}, после чего отобразится виджет, представленный на рисунке \ref{img:widgets:date_time_picker_time}.
+\begin{figure}[H]
+	\center{\includegraphics[height=6cm]{images/widgets/date_time_picker_time}}
+	\caption{Виджет для задания времени.}
+	\label{img:widgets:date_time_picker_time}
+\end{figure}
+
+Задание времени производится нажатием на соответствующие стрелки. Для того, что бы переключиться обратно на календарь, необходимо нажать на кнопку \vcenteredinclude[height=25px]{images/widgets/date_time_picker_date_btn}. Закрытие виджета происходит нажатием на область вне виджета.
+\subsection{Виджет загрузки файлов}
+\label{widget:file_upload}
+Для асинхронной загрузки файлов на сервер используется виджет загрузки файлов. Слева под меткой поля показано текущее загруженное изображение, если оно есть (см рис.~\ref{img:widgets:file_upload_ok}) или изображение по умолчанию, если ничего не загружено (см рис.~\ref{img:widget:file_upload_default_logo}). 
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/file_upload_ok}}
+	\caption{Успешная загрузка файла}
+	\label{img:widgets:file_upload_ok}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/file_upload_default_logo}}
+	\caption{Файловое поле с изображением по умолчанию}
+	\label{img:widget:file_upload_default_logo}
+\end{figure}
+
+Для того чтобы начать загрузку файла, необходимо нажать на кнопку \vcenteredinclude[height=25px]{images/widgets/file_uploat_select_file} и в окне проводника выбрать желаемый файл. Загружаемый файл должен соответствовать ограничениям на формат и размерам указанным справа от метки поля, в противном случае появится сообщение об ошибке (см. рис.~\ref{img:widget:file_upload_size_error} и~\ref{img:widget:file_upload_dimension_errorr}). В случае ошибки для загрузки нового файла требуется нажать кнопку \quotes{отмена}, после чего снова \quotes{выбрать}. Если загруженное изображение корректно, оно отобразится справа от старого изображения в области загрузки (см. рис.~\ref{img:widgets:file_upload_ok})
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/file_upload_size_error}}
+	\caption{Ошибка загрузки изображения: слишком большой размер файла}
+	\label{img:widget:file_upload_size_error}
+\end{figure}
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/file_upload_dimension_error}}
+	\caption{Ошибка загрузки изображения: слишком большое разрешение файла}
+	\label{img:widget:file_upload_dimension_errorr}
+\end{figure}	
+
+\subsection{Виджет определения порядка следования записи}
+\label{widget:ordering}
+Виджет определения порядка следования записи представляет из себя список, элементы которого можно менять местами. Изменить порядок можно, перетащив выбранную строку на новую позицию при помощи мыши (см. рис.~\ref{img:widgect:ordered_list}).
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/ordered_list}}
+	\caption{Виджет определения порядка следования записи}
+	\label{img:widgect:ordered_list}
+\end{figure}
+
+В ряде случаев элементы списка можно удалять, нажав на кнопку \vcenteredinclude[height=25px]{images/widgets/delete_btn} (рис.~\ref{img:widgect:ordered_list_with_delete}).
+
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/ordered_list_with_delete}}
+	\caption{Виджет определения порядка следования записи с возможностью удаления элементов списка}
+	\label{img:widgect:ordered_list_with_delete}
+\end{figure}
+\subsection{Виджет выпадающего списка с автодополнением}
+\label{widget:autocomplete}
+Виджет выпадающего списка предназначен для упрощения поиска. Внешний вид виджета представлен на рисунке~\ref{img:widgect:autocomplete_view} (в ряде случаев на виджете может присутствовать подсказка).
+\begin{figure}[H]
+	\center{\includegraphics[width=0.5\linewidth]{images/widgets/autocomplete_view}}
+	\caption{Виджет выпадающего списка с автодополнением}
+	\label{img:widgect:autocomplete_view}
+\end{figure}
+
+При нажатии на виджет появится список значений, которые могут быть заданы в этом поле (рис.~\ref{img:widgect:autocomplete_open_view}).
+\begin{figure}[H]
+	\center{\includegraphics[width=0.5\linewidth]{images/widgets/autocomplete_open_view}}
+	\caption{Внешний вид виджета при нажатии на него}
+	\label{img:widgect:autocomplete_open_view}
+\end{figure}
+
+Имеется возможность фильтрации результатов путем ввода с клавиатуры части названия (рис~\ref{img:widgect:autocomplete_filter_view}).
+\begin{figure}[H]
+	\center{\includegraphics[width=0.5\linewidth]{images/widgets/autocomplete_filter_view}}
+	\caption{Пример фильтрации}
+	\label{img:widgect:autocomplete_filter_view}
+\end{figure}
+
+Выбор необходимого результата осуществляется щелчком указателя мыши по нужному элементу в списке или по нажатию клавиши \keys{\enter} (в последнем случае будет выбран выделенный элемент списка). Пример заполненного поля приведён на рисунке~\ref{img:widgect:autocomplete_complete}.
+\begin{figure}[H]
+	\center{\includegraphics[width=0.6\linewidth]{images/widgets/autocomplete_complete}}
+	\caption{Пример заполненного поля}
+	\label{img:widgect:autocomplete_complete}
+\end{figure}
+
+ Для того что бы отменить выбор, необходимо нажать клавишу \keys{\esc} или кликнуть курсором мыши вне виджета. Очистка поля производится нажатием на \quotes{X}.
+\subsection{Виджет выпадающего списка с автодополнением и возможностью множественного выбора}
+\label{widget:autocomplete_with_multiselect}
+Виджет выпадающего списка с автодополнением и возможностью множественного выбора представляет собой расширение виджета автодополнения, описанного в пункте~\ref{widget:autocomplete}. При нажатии на виджет появляется список возможных значений, по которому можно осуществлять фильтрацию, однако в данном виджете имеется возможность одновременного выбора нескольких значений (рис.~\ref{img:widgect:mutliselect_filter_view}). Выбор значений осуществляется так же, как и в обычном виджете выпадающего списка с автодополнением (пункт~\ref{widget:autocomplete}). Выбор одного значения несколько раз не допускается.
+\begin{figure}[H]
+	\center{\includegraphics[width=0.6\linewidth]{images/widgets/mutliselect_filter_view}}
+	\caption{Пример фильтрации и выбора нескольких значений}
+	\label{img:widgect:mutliselect_filter_view}
+\end{figure}
+ Пример виджета, в котором выбрано несколько значений, представлен на рисунке~\ref{img:widgect:mutliselect_multi_view}
+ \begin{figure}[H]
+ 	\center{\includegraphics[width=0.6\linewidth]{images/widgets/mutliselect_multi_view}}
+ 	\caption{Пример заполнения поля несколькими значениями}
+ 	\label{img:widgect:mutliselect_multi_view}
+ \end{figure}
+ 
+ Удаление одного из значений осуществляется нажатием кнопки \quotes{$\times$} около данного значения. Для очистки всего поля необходимо нажать кнопку \quotes{$\times$} в правом верхнем углу виджета.
+ 
+\subsection{Виджет редактирования гипертекстовых полей}
+\label{widget:ckeditor}
+Данный виджет предназначен для заполнения полей, поддерживающих HTML-разметку. Внешний вид данного виджета приведён на рисунке~\ref{img:widget:ckeditor}.
+\begin{figure}[H]
+	\center{\includegraphics[width=1\linewidth]{images/widgets/ckeditor}}
+	\caption{Виджет редактирования гипертекстовых полей.}
+	\label{img:widget:ckeditor}
+\end{figure}
+На данном виджете предоставлены элементы управления, позволяющие создавать списки, изменять стиль шрифта и т.д. Также возможно изменение размеров виджета: для этого необходимо зажать курсором мыши треугольник в правом нижнем углу виджета и изменять размер, перемещая курсор мыши.

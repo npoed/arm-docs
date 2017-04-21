@@ -1,0 +1,103 @@
+\documentclass[a4paper,11pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage[T2A,T1]{fontenc}
+
+\usepackage{microtype}
+
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{float}
+\setlist{leftmargin=*}
+\usepackage{listings}
+\usepackage{textcomp}
+\lstset{basicstyle=\ttfamily,frame=single,xleftmargin=0pt,xrightmargin=0pt,upquote=true}
+\usepackage[os=win]{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\usepackage{framed}
+\usepackage{etoolbox}
+\AtBeginEnvironment{leftbar}{\sffamily\small}
+
+\lstdefinestyle{text}{
+	extendedchars     = {true},
+ 	inputencoding     = {utf8}, 
+ 	basicstyle        = {\ttfamily \scriptsize},
+ 	keywordstyle      = {\ttfamily \bfseries},
+ 	commentstyle      = {\ttfamily \itshape},
+ 	tabsize           = {2},
+ 	flexiblecolumns   = {false},
+ 	frame             = {single},
+ 	showstringspaces  = {false},
+ 	breaklines        = {true}, 
+ 	breakatwhitespace = {false},
+ 	belowcaptionskip  = {1ex},
+}
+\input{listings_cyr_hack.tex}
+
+\usetikzlibrary{chains,arrows,shapes,positioning}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\quotes}[1]{<<#1>>}
+\newcommand{\nestedquotes}[1]{\glqq#1\grqq}
+\newcommand{\itab}[1]{\hspace{.4\textwidth}\rlap{#1}}
+
+
+\newcommand{\vcenteredinclude}[2][]{\begingroup
+\setbox0=\hbox{\includegraphics[#1]{#2}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{0pt}%
+    {-1.25ex \@plus-0ex \@minus -.2ex}%
+    {0.5ex plus 0.1ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{0pt}%
+    {-3.5ex \@plus-0ex \@minus -.2ex}%
+    {1.5ex plus 3.5ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \begin{centering}    
+    \Large \bfseries \thechapter \space \MakeUppercase{#1}\par\nobreak
+    \end{centering}    
+    \vskip 40\p@
+  }}
+\def\@makeschapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \begin{centering}
+    \Large \bfseries \MakeUppercase{#1}\par\nobreak
+    \end{centering}
+    \vskip 40\p@
+  }}
+\makeatother
+
+\begin{document}
+\input{title.tex}
+
+\chapter*{Аннотация}
+	\input{abstract.tex}
+
+\tableofcontents
+\clearpage
+
+\chapter{Общие сведения о программе}
+	\input{info.tex}
+\chapter{Структура программы}
+	\input{structure.tex}
+\chapter{Настройка программы}
+	\input{settings.tex}
+\chapter{Проверка программы}
+	\input{check.tex}
+
+\end{document}

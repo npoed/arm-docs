@@ -1,0 +1,104 @@
+\documentclass[a4paper,11pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage[T2A,T1]{fontenc}
+
+\usepackage{indentfirst}
+\usepackage{microtype}
+
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{float}
+\setlist{leftmargin=*}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,frame=single,xleftmargin=3em,xrightmargin=3em}
+\usepackage[os=win]{menukeys}
+\renewmenumacro{\keys}[+]{shadowedroundedkeys}
+\usepackage{framed}
+\usepackage{etoolbox}
+\AtBeginEnvironment{leftbar}{\sffamily\small}
+
+\usetikzlibrary{chains,arrows,shapes,positioning}
+\usepackage[hidelinks]{hyperref}
+\setcounter{chapter}{0}
+% \usepackage[perpage]{footmisc}
+\usepackage{chngcntr}
+\counterwithin*{footnote}{page}
+
+\newcommand{\quotes}[1]{<<#1>>}
+\newcommand{\nestedquotes}[1]{\glqq#1\grqq}
+\newcommand{\itab}[1]{\hspace{.4\textwidth}\rlap{#1}}
+
+
+
+\newcommand{\vcenteredinclude}[2][]{\begingroup
+\setbox0=\hbox{\includegraphics[#1]{#2}}%
+\parbox{\wd0}{\box0}\endgroup}
+
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{0pt}%
+    {-1.25ex \@plus-0ex \@minus -.2ex}%
+    {0.5ex plus 0.1ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{0pt}%
+    {-3.5ex \@plus-0ex \@minus -.2ex}%
+    {1.5ex plus 3.5ex}% space after heading
+    {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\makeatletter
+\def\@makechapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    \interlinepenalty\@M
+    \begin{centering}    
+    \Large \bfseries \thechapter \space \MakeUppercase{#1}\par\nobreak
+    \end{centering}    
+    \vskip 40\p@
+  }}
+\def\@makeschapterhead#1{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    \interlinepenalty\@M
+    \begin{centering}
+    \Large \bfseries \MakeUppercase{#1}\par\nobreak
+    \end{centering}
+    \vskip 40\p@
+  }}
+\makeatother
+
+\begin{document}
+	\input{title.tex}
+
+\tableofcontents
+\clearpage
+
+\chapter{Введение}
+	\input{intro.tex}
+\chapter{Назначение и условия применения}
+	\input{purpose.tex}
+\chapter{Подготовка к работе}
+	\input{prepare.tex}
+\chapter{Описание операций}
+	\input{authorization.tex}
+	\input{university_select.tex}
+	\section{Типовые элементы интерфейса}
+		\input{datatables.tex}
+		\input{widgets.tex}
+	\input{university.tex}
+	\input{instructor.tex}
+	\input{course.tex}
+	\input{course_session.tex}
+	\input{employee.tex}
+	\input{student.tex}
+	\input{analytics.tex}
+	\input{agreement.tex}
+	\input{csv_dumps.tex}
+\chapter{Рекомендации по освоению}
+	\input{usage.tex}
+	
+\end{document}
