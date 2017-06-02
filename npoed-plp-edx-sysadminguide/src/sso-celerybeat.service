@@ -1,0 +1,14 @@
+[Unit]
+Description=SSO celerybeat
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/edx/app/sso/npoed-sso-git
+ExecStart=/edx/app/sso/venv/bin/python ./manage.py celeryd -E -B --settings=npoed_sso_edx.settings
+ExecStop=/bin/kill -s TERM $MAINPID
+KillMode=control-group
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

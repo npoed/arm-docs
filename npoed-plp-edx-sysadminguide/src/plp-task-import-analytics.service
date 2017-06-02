@@ -1,0 +1,8 @@
+[Unit]
+Description=Import analytics
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c '/edx/app/plp/venv/bin/python ./manage.py import-analytics $(date --date="1 days ago" +%%Y-%%m-%%d) --settings=settings.instance'
+User=www-data
+WorkingDirectory=/edx/app/plp/npoed-plp-git/npoed_plp
