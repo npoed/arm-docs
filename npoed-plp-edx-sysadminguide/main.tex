@@ -38,6 +38,8 @@
 \usetikzlibrary{chains,arrows,shapes,positioning}
 \usepackage[hidelinks]{hyperref}
 
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2cm]{geometry}
+
 \newcommand{\quotes}[1]{<<#1>>}
 \newcommand{\nestedquotes}[1]{\glqq#1\grqq}
 \newcommand{\itab}[1]{\hspace{.4\textwidth}\rlap{#1}}
@@ -91,6 +93,8 @@
 \tableofcontents
 \clearpage
 
+\chapter{Термины и сокращения}
+	\input{terms.tex}
 \chapter{Общие сведения о программе}
 	\input{info.tex}
 \chapter{Структура программы}
@@ -99,5 +103,7 @@
 	\input{settings.tex}
 \chapter{Проверка программы}
 	\input{check.tex}
+\chapter{Обслуживание}
+	\input{support.tex}
 
 \end{document}

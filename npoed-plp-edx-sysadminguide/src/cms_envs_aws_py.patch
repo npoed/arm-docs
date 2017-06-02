@@ -1,0 +1,11 @@
+diff --git cms/envs/aws.py cms/envs/aws.py
+index e938551b8b..f17124e5e7 100644
+--- cms/envs/aws.py
++++ cms/envs/aws.py
+@@ -437,3 +437,6 @@ PARTNER_SUPPORT_EMAIL = ENV_TOKENS.get('PARTNER_SUPPORT_EMAIL', PARTNER_SUPPORT_
+ 
+ # Affiliate cookie tracking
+ AFFILIATE_COOKIE_NAME = ENV_TOKENS.get('AFFILIATE_COOKIE_NAME', AFFILIATE_COOKIE_NAME)
++
++# For pushing object from PLP
++EDX_API_KEY = AUTH_TOKENS.get('EDX_API_KEY')

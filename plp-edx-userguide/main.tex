@@ -21,6 +21,9 @@
 
 \usetikzlibrary{chains,arrows,shapes,positioning}
 \usepackage[hidelinks]{hyperref}
+
+\usepackage[top=2cm, bottom=2cm, left=2.5cm, right=2cm]{geometry}
+
 \setcounter{chapter}{0}
 % \usepackage[perpage]{footmisc}
 \usepackage{chngcntr}
@@ -86,9 +89,12 @@
 \chapter{Описание операций}
 	\input{authorization.tex}
 	\input{university_select.tex}
+	\input{menu.tex}
+	\input{roles.tex}
 	\section{Типовые элементы интерфейса}
 		\input{datatables.tex}
 		\input{widgets.tex}
+	\input{csv_format.tex}
 	\input{university.tex}
 	\input{instructor.tex}
 	\input{course.tex}
@@ -98,6 +104,7 @@
 	\input{analytics.tex}
 	\input{agreement.tex}
 	\input{csv_dumps.tex}
+  \input{mat.tex}
 \chapter{Рекомендации по освоению}
 	\input{usage.tex}
 	

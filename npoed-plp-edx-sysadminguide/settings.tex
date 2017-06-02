@@ -26,13 +26,20 @@
 
 Даже если \texttt{PLP} и \texttt{SSO} развёрнуты на одном компьютере, хосты в \texttt{RabbitMQ} для них должны быть созданы разные.
 
-Для \texttt{Celery} нужно настроить только автоматический запуск при старте системы. Для этого нужно найти в дистрибутиве \texttt{Celery}
-скрипт соответствующий предпочитаемому в Вашей ОС способу запуска (\texttt{init-script}, \texttt{systemd}, \texttt{supervisord} и т.д.)
-и скопировать его в соответствующее место. Кроме этого нужно создать конфигурационный файл \texttt{/etc/default/celeryd} следующего содержания
+Для \texttt{Celery} нужно настроить только автоматический запуск при старте системы. Запуск может осуществляться двумя способами: 
+\begin{itemize}
+	\item с помощью демона \texttt{celeryd};
+	\item с помощью сервиса \texttt{systemd}.
+\end{itemize}
+В первом случае необходимо (\texttt{init-script} из дистрибутива \texttt{Celery} скопировать в необходимую директорию в соответствии с выбранным дистрибутивом. Кроме этого нужно создать конфигурационный файл \texttt{/etc/default/celeryd} следующего содержания
 для \texttt{PLP}:
 \lstinputlisting[style=text]{src/celeryd_plp}
 и для \texttt{SSO}:
 \lstinputlisting[style=text]{src/celeryd_sso}
+Для запуска обработчиков асинхронных задач с помощью сервиса \texttt{systemd} необходимо сформировать описания для \texttt{PLP}:
+\lstinputlisting[style=text]{src/plp-celerybeat.service}
+и для \texttt{SSO}:
+\lstinputlisting[style=text]{src/sso-celerybeat.service}
 
 \section{Настройка SSO}
 \begin{itemize}
@@ -40,6 +47,8 @@
 	\begin{itemize}
 		\item \texttt{PLP\_URL} --- адрес, по которому будет развёрнуто \texttt{PLP}
 		\item \texttt{SSO\_API\_KEY} --- \texttt{API}-ключ \texttt{SSO} (задать, если ещё не задан) (произвольная строка)
+		\item \texttt{PLP\_API\_KEY} --- \texttt{API}-ключ \texttt{PLP}
+		\item \texttt{EDX\_API\_KEY} --- \texttt{API}-ключ \texttt{LMS, LCMS}
 		\item \texttt{BROKER\_VHOST} --- имя виртуального хоста RabbitMQ
 		\item \texttt{BROKER\_USER} --- имя пользователя RabbitMQ
 		\item \texttt{BROKER\_PASSWORD} --- пароль пользователя RabbitMQ
@@ -59,7 +68,7 @@
 	\end{itemize}
 \end{itemize}
 
-\section{Настройка EDX}
+\section{Настройка LMS, LCMS}
 \subsection{Настройка параметров взаимодействия с PLP}
 \begin{itemize}
 	\item В конфигурационных файлах \texttt{cms.env.json} и \texttt{lms.env.json} необходимо задать параметр \texttt{PLP\_URL} ---
@@ -67,18 +76,24 @@
 	\item Необходимо установить расширение \texttt{open\_edx\_api\_extension\_cms}. Для этого:
 	\begin{itemize}
 		\item Необходимо установить расширение с помощью \texttt{pip}
-		\item В файле \texttt{cms/envs/common.py} в параметр \texttt{INSTALLED\_APPS} нужно добавить \texttt{\textquotesingle{}open\_edx\_api\_extension\_cms\textquotesingle{}}
-		\item В файле \texttt{cms/urls.py} в параметр \texttt{urlpatterns} нужно добавить
-			\texttt{url(r\textquotesingle{}\^{}api/extended/\textquotesingle{}, include(\textquotesingle{}open\_edx\_api\_extension\_cms.urls\textquotesingle{}, namespace=\textquotesingle{}api\_extension\textquotesingle{}))}
-		\item В файле \texttt{cms/envs/aws.py} нужно добавить строку \texttt{EDX\_API\_KEY = AUTH\_TOKENS.get("EDX\_API\_KEY")}
-		\item В кофигурационном файле \texttt{cms.auth.json} нужно задать параметр \texttt{EDX\_API\_KEY},
+		\item К файлу \texttt{cms/envs/common.py} применить патч:\\
+			\lstinputlisting[style=text]{src/cms_envs_common_py.patch}
+		\item К файлу \texttt{cms/urls.py} применить патч:\\
+			\lstinputlisting[style=text]{src/cms_urls_py.patch}
+		\item К файлу \texttt{cms/envs/aws.py} применить патч:\\
+			\lstinputlisting[style=text]{src/cms_envs_aws_py.patch}
+		\item В конфигурационном файле \texttt{cms.auth.json} нужно задать параметр \texttt{EDX\_API\_KEY},
 			причем таким же значением, как и в файле \texttt{lms.auth.json}
-		\item Если в \texttt{EDX CMS} отсутствует пользователь с ролью \texttt{GlobalAdmin} (пользователь с \texttt{is\_staff} равным \texttt{True}),
+		\item В конфигурационном файле \texttt{lms.auth.json} нужно задать параметр \texttt{PLP\_API\_KEY} (\texttt{API}-ключ \texttt{PLP})
+		\item К файлу \texttt{lms/envs/npoed.py} применить патч:\\
+			\lstinputlisting[style=text]{src/lms_envs_npoed_py.patch}
+		\item В конфигурационном файле \texttt{lms.env.json} нужно задать параметр \texttt{PLP\_CONNECTION\_TIMEOUT} (таймаут для запросов в \texttt{PLP})
+		\item Если в \texttt{LCMS} отсутствует пользователь с ролью \texttt{GlobalAdmin} (пользователь с \texttt{is\_staff} равным \texttt{True}),
 			то его нужно создать, так как от его имени будут создаваться курсы.
 	\end{itemize}
 \end{itemize}
-\subsection{Настройка подсистемы сбора аналитики EDX}
-Для запуска задач по расписанию, выполняющих сбор и агрегацию данных из БД \texttt{EDX}, хранилища курсов \texttt{EDX}, журнала событий \texttt{EDX} необходимо выполнить следующие подготовительные действия
+\subsection{Настройка подсистемы сбора аналитики LMS}
+Для запуска задач по расписанию, выполняющих сбор и агрегацию данных из БД \texttt{LMS, LCMS}, хранилища курсов \texttt{LMS, LCMS}, журнала событий \texttt{LMS} необходимо выполнить следующие подготовительные действия
 \begin{itemize}
 	\item С помощью менеджера конфигураций \texttt{ansible} выполнить установку роли \texttt{analytics-pipeline}
 	\item Создать директорию для приложения сбора данных, например \texttt{/edx/app/pipeline}, перейти в созданную директорию
@@ -105,7 +120,7 @@
 	\begin{sloppypar}
 		\texttt{sudo -Hu hadoop /edx/app/hadoop/hadoop/bin/hdfs dfs -put -f /edx/var/log/tracking/tracking.log-* hdfs://localhost:9000/data}	
 	\end{sloppypar}		
-	\item Сформировать файл \texttt{/edx/etc/edx-analytics-pipeline/input.json} с параметрами доступа к БД \texttt{EDX} следующего содержания:
+	\item Сформировать файл \texttt{/edx/etc/edx-analytics-pipeline/input.json} с параметрами доступа к БД \texttt{LMS, LCMS} следующего содержания:
 	\lstinputlisting[style=text]{src/input.json}	
 	\item Сформировать файл \texttt{/edx/etc/edx-analytics-pipeline/output.json} с параметрами доступа к БД результатов сбора данных следующего содержания:
 	\lstinputlisting[style=text]{src/output.json}
@@ -119,36 +134,31 @@
 	\begin{itemize}
 		\item путь к исполняемому файлу интерпретатора \texttt{Python} в виртуальном окружении подсистемы обработки событий в секции \texttt{hadoop}
 		\item доступ к БД результатов сбора данных в секции \texttt{database-export}
-		\item доступ к БД \texttt{EDX} в секции \texttt{database-import}
-		\item доступ к хранилищу курсов \texttt{EDX} в секции \texttt{mongodb}
-		\item шаблон имени файла с событиями \texttt{EDX} в секции \texttt{event-logs}
+		\item доступ к БД \texttt{LMS, LCMS} в секции \texttt{database-import}
+		\item доступ к хранилищу курсов \texttt{LCMS} в секции \texttt{mongodb}
+		\item шаблон имени файла с событиями \texttt{LMS} в секции \texttt{event-logs}
 	\end{itemize}
 	 В результате должен получиться файл \texttt{client.cfg} следующего содержания:\\
 		\lstinputlisting[style=text,breaklines=true]{src/client.cfg}	
 	 В результате должен получиться файл \texttt{override.cfg} следующего содержания:\\		
 		\lstinputlisting[style=text]{src/override.cfg}
 \end{itemize}
-После подготовительных действий необходимо добавить в планировщик задач одного их хостов, на котором исполняется \texttt{EDX}, директивы для выполнения от пользователя \texttt{hadoop} следующих команд один раз в сутки:
+После подготовительных действий необходимо добавить в планировщик задач одного их хостов, на котором исполняется \texttt{LMS}, директиву для выполнения от пользователя \texttt{hadoop} сценария сбора данных аналитики из \texttt{LMS} один раз в сутки:
 \begin{sloppypar}
-\begin{itemize}
-	\item \texttt{/edx/app/hadoop/hadoop/bin/hadoop fs -rm -r hdfs://127.0.0.1:9000/edx-analytics-pipeline/warehouse/*}
-	\item \texttt{/edx/app/hadoop/hadoop/bin/hadoop fs -rm -r hdfs://127.0.0.1:9000/edx-analytics-pipeline/dest}
-	\item \texttt{/edx/app/hadoop/hadoop/bin/hadoop fs -rm -r hdfs://127.0.0.1:9000/edx-analytics-pipeline/dest/*}
-	\item \texttt{mysql> DROP DATABASE edx\_hive\_metastore;}
-	\item \texttt{mysql> CREATE DATABASE edx\_hive\_metastore CHARACTER SET = latin1;}
-	\item \texttt{/edx/app/pipeline/pipeline/bin/launch-task ActivityWorkflow -{}-local-scheduler -{}-n-reduce-tasks 4 -{}-interval 2016-04-01-2016-04-30 -{}-overwrite}
-	\item \texttt{/edx/app/pipeline/pipeline/bin/launch-task CustomEnrollmentTaskWorkflow -{}-local-scheduler -{}-n-reduce-tasks 4 -{}-interval 2016-04-01-2016-04-30 -{}-overwrite}
-	\item \texttt{/edx/app/pipeline/pipeline/bin/launch-task MongoImportTaskWorkflow -{}-local-scheduler -{}-overwrite}
-\end{itemize}
+	\texttt{00 02 * * * cd /edx/app/pipeline/edx-analytics-pipeline \&\& /edx/app/pipeline/edx-analytics-pipeline/scripts/run-pipeline-tasks.sh > /dev/null 2>\&1}
 \end{sloppypar}
-Значение параметра \texttt{n-reduce-tasks} должно быть установлено равным количеству доступных ядер на хосте, на котором производится сбор аналитики \texttt{EDX}.
 
 \subsection{Настройка подсистемы сбора аналитики PLP}
-Для запуска задач по расписанию, выполняющих сбор и агрегацию данных из БД результатов сбора данных \texttt{EDX} (\texttt{reports}) необходимо проинициализировать представления и хранимые процедуры командой, выполненной из виртуального окружения \texttt{PLP}:\\
+Для запуска задач по расписанию, выполняющих сбор и агрегацию данных из БД результатов сбора данных \texttt{LMS} (\texttt{reports}) необходимо проинициализировать представления и хранимые процедуры командой, выполненной из виртуального окружения \texttt{PLP}:\\
 	\texttt{./manage.py init-analytics --settings=settings.local\_settings}\\
 После подготовительных действий необходимо добавить в планировщик задач одного их хостов, на котором исполняется \texttt{PLP}, директиву для выполнения команды, приведённой ниже. Данная команда должна выполняться один раз в сутки от пользователя, от которого запускается \texttt{PLP}.\\
 	\texttt{./manage import-analytics 2016-03-01 --settings=settings.local\_settings}\\
-При запуске команды необходимо в качестве аргумента указывать дату, предшествующую дню, когда производится запуск. Формат даты задаётся в параметре \texttt{EVENT\_DATE\_FORMAT} в настройках \texttt{PLP}.
+При запуске команды необходимо в качестве аргумента указывать дату, предшествующую дню, когда производится запуск. Формат даты задаётся в параметре \texttt{EVENT\_DATE\_FORMAT} в настройках \texttt{PLP}.\\
+В случае использования \texttt{systemd} для запуска сервисов периодическое выполнение команды сбора аналитики может быть организовано его средствами. Для этого необходимо сформировать файлы с описанием сервиса и описанием периодического запуска.\\
+Пример файла \texttt{plp-task-import-analytics.service} с описанием сервиса:
+		\lstinputlisting[style=text,breaklines=true]{src/plp-task-import-analytics.service}
+Пример файла \texttt{plp-task-import-analytics.timer} с описанием периодического выполнения:
+		\lstinputlisting[style=text,breaklines=true]{src/plp-task-import-analytics.timer}
 
 \section{Настройка PLP}
 Для дальнейшей настройки \texttt{PLP} нужно:
@@ -172,9 +182,9 @@
 		\item \texttt{SOCIAL\_AUTH\_NPOEDSSO\_SECRET} --- \texttt{Client secret}, заданный в \texttt{SSO} для \texttt{PLP}
 		\item \texttt{SSO\_API\_TOKEN} --- токен суперпользователя, созданный в \texttt{SSO}
 		\item \texttt{SSO\_API\_KEY} --- \texttt{API}-ключ \texttt{SSO}
-		\item \texttt{EDX\_ENROLLMENT\_URL} --- адрес, по которому развёрнуто \texttt{EDX LMS}
-		\item \texttt{EDX\_CMS\_URL} --- адрес, по которому развёрнуто \texttt{EDX CMS}
-		\item \texttt{EDX\_API\_KEY} --- \texttt{API}-ключ \texttt{EDX}
+		\item \texttt{EDX\_ENROLLMENT\_URL} --- адрес, по которому развёрнуто \texttt{LMS}
+		\item \texttt{EDX\_CMS\_URL} --- адрес, по которому развёрнуто \texttt{LCMS}
+		\item \texttt{EDX\_API\_KEY} --- \texttt{API}-ключ \texttt{LMS, LCMS}
 		\item \texttt{SITE\_NAME} --- внешний адрес \texttt{PLP}
 		\item \texttt{BROKER\_VHOST} --- имя виртуального хоста RabbitMQ
 		\item \texttt{BROKER\_USER} --- имя пользователя RabbitMQ
@@ -191,8 +201,12 @@
 \end{itemize}
 
 \section{Настройка запуска PLP}
-Для запуска \texttt{PLP} необходимы следующие программы: \texttt{Supervisor}, \texttt{Nginx} и \texttt{gunicorn}.
-Для их настройки нужно выполнить следующие действия:
+Запуск \texttt{PLP} может производиться с помощью следующих наборов программ: 
+\begin{itemize}
+	\item \texttt{Supervisor}, \texttt{gunicorn}, \texttt{Nginx};
+	\item \texttt{systemd}, \texttt{gunicorn}, \texttt{Nginx}.
+\end{itemize}
+Для настройки набора \texttt{Supervisor}, \texttt{gunicorn}, \texttt{Nginx} нужно выполнить следующие действия:
 
 \begin{itemize}
 	\vbox{\item Создать conf-файл для \texttt{Supervisor} следующего содержания:
@@ -205,4 +219,12 @@
 	\item Создать конфигурационный файл для gunicorn, назвать его \texttt{plp\_gunicorn.py} и подкаталог \texttt{npoed\_plp} установленного приложения.
 		Содержимое этого файла должно выглядеть примерно так:
 		\lstinputlisting[style=text]{src/plp_gunicorn.py}
+\end{itemize}
+
+Для настройки набора \texttt{systemd}, \texttt{gunicorn}, \texttt{Nginx} нужно выполнить следующие действия:
+
+\begin{itemize}
+	\vbox{\item Создать файл описания сервиса для \texttt{systemd} следующего содержания:
+	\lstinputlisting[style=text]{src/plp.service}}
+	\item Создать конфигурационные файл для \texttt{Nginx} и \texttt{gunicorn} аналогично набору \texttt{Supervisor}, \texttt{gunicorn}, \texttt{Nginx}.
 \end{itemize}

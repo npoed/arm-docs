@@ -1,0 +1,13 @@
+diff --git cms/urls.py cms/urls.py
+index 4e7e8955b0..4494159e53 100644
+--- cms/urls.py
++++ cms/urls.py
+@@ -55,6 +55,8 @@ urlpatterns = patterns(
+ 
+     # Update session view
+     url(r'^lang_pref/session_language', 'lang_pref.views.update_session_language', name='session_language'),
++
++    url(r'^api/extended/', include('open_edx_api_extension_cms.urls', namespace='api_extension')),
+ )
+ 
+ # User creation and updating views

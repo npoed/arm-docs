@@ -1,0 +1,14 @@
+[Unit]
+Description=PLP celerybeat
+After=network.target
+
+[Service]
+User=www-data
+WorkingDirectory=/edx/app/plp/npoed-plp-git/npoed_plp
+ExecStart=/edx/app/plp/venv/bin/python ./manage.py celeryd -E -B --settings=settings.instance
+ExecStop=/bin/kill -s TERM $MAINPID
+KillMode=control-group
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

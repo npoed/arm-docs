@@ -1,0 +1,10 @@
+diff --git lms/envs/npoed.py lms/envs/npoed.py
+index 0c7179c100..1469068212 100644
+--- lms/envs/npoed.py
++++ lms/envs/npoed.py
+@@ -62,3 +62,5 @@ if USERS_WITH_SPECIAL_PERMS_IDS_STR:
+ 
+ PLP_API_KEY = AUTH_TOKENS.get('PLP_API_KEY')
+ 
++PLP_CONNECTION_TIMEOUT = ENV_TOKENS.get("PLP_CONNECTION_TIMEOUT")
++

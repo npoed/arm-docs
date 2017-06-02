@@ -1,0 +1,14 @@
+diff --git cms/envs/common.py cms/envs/common.py
+index 15687c265a..2db6fcc21b 100644
+--- cms/envs/common.py
++++ cms/envs/common.py
+@@ -912,6 +912,9 @@ INSTALLED_APPS = (
+ 
+     # Enables default site and redirects
+     'django_sites_extensions',
++
++    # Enables API extenstion for pushing objects from PLP
++    'open_edx_api_extension_cms',
+ )
+ 
+ 
